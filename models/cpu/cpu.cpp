@@ -2,8 +2,8 @@
 
 #include <iostream>
 
+#include "cpu/instruction.hpp"
 #include "decoder.hpp"
-#include "instruction.hpp"
 
 namespace riscvModel
 {

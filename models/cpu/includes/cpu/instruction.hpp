@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 
-#include "addrSpace.hpp"
-#include "registers.hpp"
+#include "cpu/addrSpace.hpp"
+#include "cpu/registers.hpp"
 
 namespace riscvModel
 {

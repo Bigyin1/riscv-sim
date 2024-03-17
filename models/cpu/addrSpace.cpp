@@ -1,4 +1,4 @@
-#include "addrSpace.hpp"
+#include "cpu/addrSpace.hpp"
 
 #include <stdexcept>
 

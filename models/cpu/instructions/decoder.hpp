@@ -1,6 +1,6 @@
 #pragma once
 
-#include "instruction.hpp"
+#include "cpu/instruction.hpp"
 
 namespace riscvModel
 {
