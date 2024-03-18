@@ -6,77 +6,81 @@
 
 #include "ram/ram.hpp"
 
-class TestArithm : public testing::Test
+class TestCPU : public testing::Test
 {
 protected:
-    const riscvModel::Instruction* getNextInstr()
-    {
+    TestCPU() : aspace(&ram), cpu(regs, aspace) {}
 
-        auto ri    = ram.ReadWordFrom(loadAddr);
-        auto instr = cpu->Decode(ri);
-        if (instr == nullptr)
-        {
-            return nullptr;
-        }
+    static void SetUpTestSuite() { input.open("testdata/arithm.bin"); }
 
-        loadAddr += sizeof(riscvModel::RawInstr);
-        return instr;
-    }
+    static void TearDownTestSuite() { input.close(); }
 
     virtual void SetUp() override
     {
-        std::ifstream bin("arithm.bin");
-        ram.LoadCode(bin, loadAddr);
 
-        aspace = new riscvModel::AddrSpace(&ram);
+        uint32_t rinstr = 0;
+        input.read((char*)&rinstr, sizeof(rinstr));
 
-        this->cpu = new riscvModel::CPU(regs, *aspace);
+        currInstr = cpu.Decode(rinstr);
     }
 
-    virtual void TearDown() override { delete cpu; }
+    const riscvModel::Instruction* currInstr = nullptr;
 
-    riscvModel::RAM       ram  = {0};
+    riscvModel::RAM<512>  ram  = {0};
     riscvModel::Registers regs = {0};
+    riscvModel::AddrSpace aspace;
 
-    riscvModel::AddrSpace* aspace = nullptr;
-    riscvModel::CPU*       cpu    = nullptr;
+    riscvModel::CPU cpu;
 
-    uint64_t loadAddr = 0;
+    static std::ifstream input;
 };
 
-TEST_F(TestArithm, test1)
-{
+std::ifstream TestCPU::input;
 
+TEST_F(TestCPU, addi_1)
+{
     std::cout << "testing: "
               << "addi  x10, x0, 1" << std::endl;
-    auto instr = this->getNextInstr();
-    ASSERT_NE(instr, nullptr);
+    ASSERT_NE(currInstr, nullptr);
 
-    cpu->Execute(instr);
+    cpu.Execute(currInstr);
     ASSERT_EQ(regs.ReadRegVal(10), 1);
+}
 
+TEST_F(TestCPU, addi_2)
+{
     std::cout << "testing: "
               << "addi  x10, x10, -2" << std::endl;
-    instr = this->getNextInstr();
-    ASSERT_NE(instr, nullptr);
+    ASSERT_NE(currInstr, nullptr);
 
-    cpu->Execute(instr);
-    ASSERT_EQ(regs.ReadRegVal(10), (uint32_t)-1);
+    regs.WriteAtReg(10, 1);
 
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.ReadRegVal(10), -1);
+}
+
+TEST_F(TestCPU, add)
+{
     std::cout << "testing: "
               << "add x12, x0, x10" << std::endl;
-    instr = this->getNextInstr();
-    ASSERT_NE(instr, nullptr);
+    ASSERT_NE(currInstr, nullptr);
 
-    cpu->Execute(instr);
-    ASSERT_EQ(regs.ReadRegVal(12), (uint32_t)-1);
+    regs.WriteAtReg(10, (riscvModel::Registers::GPReg)-1);
 
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.ReadRegVal(12), -1);
+}
+
+TEST_F(TestCPU, sub)
+{
     std::cout << "testing: "
               << "sub x12, x12, x10" << std::endl;
-    instr = this->getNextInstr();
-    ASSERT_NE(instr, nullptr);
+    ASSERT_NE(currInstr, nullptr);
 
-    cpu->Execute(instr);
+    regs.WriteAtReg(12, (riscvModel::Registers::GPReg)-1);
+    regs.WriteAtReg(10, (riscvModel::Registers::GPReg)-1);
+
+    cpu.Execute(currInstr);
     ASSERT_EQ(regs.ReadRegVal(12), 0);
 }
 

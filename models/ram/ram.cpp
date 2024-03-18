@@ -3,26 +3,37 @@
 namespace riscvModel
 {
 
-RAM::RAM(uint64_t _start) : start(_start) {}
+template class RAM<512>;
+template class RAM<UINT16_MAX>;
 
-std::pair<uint64_t, uint64_t> RAM::GetAddrRange()
+template <std::size_t RamSz>
+RAM<RamSz>::RAM(uint64_t _start) : start(_start)
+{
+}
+
+template <std::size_t RamSz>
+std::pair<uint64_t, uint64_t> RAM<RamSz>::GetAddrRange()
 {
 
     return {this->start, this->start + this->storage.size() * sizeof(this->storage[0])};
 }
 
-uint32_t RAM::ReadWordFrom(uint64_t addr)
+template <std::size_t RamSz>
+uint32_t RAM<RamSz>::ReadWordFrom(uint64_t addr)
 {
     size_t storageIdx = addr / 4;
     return this->storage[storageIdx];
 }
-void RAM::WriteWordAt(uint64_t addr, uint32_t w)
+
+template <std::size_t RamSz>
+void RAM<RamSz>::WriteWordAt(uint64_t addr, uint32_t w)
 {
     size_t storageIdx         = addr / 4;
     this->storage[storageIdx] = w;
 }
 
-uint16_t RAM::ReadHWordFrom(uint64_t addr)
+template <std::size_t RamSz>
+uint16_t RAM<RamSz>::ReadHWordFrom(uint64_t addr)
 {
     size_t storageIdx = addr / 4;
     size_t bucketIdx  = addr % 2;
@@ -33,7 +44,9 @@ uint16_t RAM::ReadHWordFrom(uint64_t addr)
 
     return bucket[bucketIdx];
 }
-void RAM::WriteHWordAt(uint64_t addr, uint16_t hw)
+
+template <std::size_t RamSz>
+void RAM<RamSz>::WriteHWordAt(uint64_t addr, uint16_t hw)
 {
     size_t storageIdx = addr / 4;
     size_t bucketIdx  = addr % 2;
@@ -46,7 +59,8 @@ void RAM::WriteHWordAt(uint64_t addr, uint16_t hw)
     storage[storageIdx] = word;
 }
 
-uint8_t RAM::ReadByteFrom(uint64_t addr)
+template <std::size_t RamSz>
+uint8_t RAM<RamSz>::ReadByteFrom(uint64_t addr)
 {
     size_t storageIdx = addr / 4;
     size_t bucketIdx  = addr % 4;
@@ -57,7 +71,9 @@ uint8_t RAM::ReadByteFrom(uint64_t addr)
 
     return bucket[bucketIdx];
 }
-void RAM::WriteByteAt(uint64_t addr, uint8_t b)
+
+template <std::size_t RamSz>
+void RAM<RamSz>::WriteByteAt(uint64_t addr, uint8_t b)
 {
     size_t storageIdx = addr / 4;
     size_t bucketIdx  = addr % 4;
@@ -70,13 +86,14 @@ void RAM::WriteByteAt(uint64_t addr, uint8_t b)
     storage[storageIdx] = word;
 }
 
-void RAM::LoadCode(std::ifstream& f, size_t at)
+template <std::size_t RamSz>
+void RAM<RamSz>::LoadCode(std::ifstream& f, size_t at)
 {
 
     while (!f.eof())
     {
         uint32_t val = 0;
-        f.read((char*)&val, sizeof(uint32_t));
+        f.read((char*)&val, sizeof(val));
 
         this->storage[at] = val;
         at++;

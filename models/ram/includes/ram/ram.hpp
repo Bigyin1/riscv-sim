@@ -7,10 +7,11 @@
 namespace riscvModel
 {
 
+template <std::size_t RamSz>
 class RAM : public Device
 {
 private:
-    std::array<uint32_t, UINT16_MAX / 4> storage = {};
+    std::array<uint32_t, RamSz / 4> storage = {};
 
     uint64_t start;
 

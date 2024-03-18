@@ -97,3 +97,5 @@ SpacesInSquareBrackets: false
 Standard:        Cpp11
 TabWidth:        8
 UseTab:          Never
+
+AllowShortFunctionsOnASingleLine: Inline

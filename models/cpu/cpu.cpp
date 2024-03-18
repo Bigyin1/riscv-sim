@@ -10,9 +10,15 @@ namespace riscvModel
 
 CPU::CPU(Registers& _regs, AddrSpace& aspace) : regs(_regs), addrSpace(aspace) {}
 
-RawInstr CPU::Fetch() { return this->addrSpace.ReadWordFrom(this->regs.GetPC()); }
+RawInstr CPU::Fetch()
+{
+    return this->addrSpace.ReadWordFrom(this->regs.GetPC());
+}
 
-const Instruction* CPU::Decode(RawInstr iraw) { return this->idecoder.Decode(iraw); }
+const Instruction* CPU::Decode(RawInstr iraw)
+{
+    return this->idecoder.Decode(iraw);
+}
 
 void CPU::Execute(const Instruction* instr)
 {
