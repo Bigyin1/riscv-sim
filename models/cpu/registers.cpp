@@ -12,7 +12,7 @@ void Registers::AdvancePC()
     this->pc += sizeof(RawInstr);
 }
 
-void Registers::PCRelJmp(Registers::GPReg offset)
+void Registers::PCRelJmp(uint64_t offset)
 {
     this->pc += offset;
 }

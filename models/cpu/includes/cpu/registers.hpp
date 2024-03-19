@@ -21,7 +21,7 @@ public:
     Registers(uint64_t pc);
 
     void     AdvancePC();
-    void     PCRelJmp(GPReg offset);
+    void     PCRelJmp(uint64_t offset);
     uint64_t GetPC();
 
     GPReg ReadRegVal(RegIdx idx) const;

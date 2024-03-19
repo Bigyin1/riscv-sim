@@ -91,11 +91,12 @@ Instruction* Decoder::BTypeDecoder::Decode(RawInstr rinstr)
     this->instr.rs1 = map.rs1;
     this->instr.rs2 = map.rs2;
 
-    this->instr.imm = (GPReg)map.imm4 << 2 | (GPReg)map.imm6 << 6 | (GPReg)map.imm1_1 << 12;
+    this->instr.imm =
+        (uint64_t)map.imm4 << 1 | (uint64_t)map.imm6 << 5 | (uint64_t)map.imm1_1 << 11;
 
     if (map.imm1_2)
     {
-        this->instr.imm |= ~(GPReg)0b111'111'111'111'1;
+        this->instr.imm |= ~(uint64_t)0b111'111'111'111;
     }
 
     return static_cast<Instruction*>(&this->instr);

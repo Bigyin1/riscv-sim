@@ -59,7 +59,7 @@ struct SType : public Instruction
 
 struct BType : public Instruction
 {
-    Registers::GPReg  imm;
+    uint64_t          imm;
     Registers::RegIdx rs2;
     Registers::RegIdx rs1;
 
