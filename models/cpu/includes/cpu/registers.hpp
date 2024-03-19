@@ -10,7 +10,9 @@ namespace riscvModel
 class Registers
 {
 public:
-    using GPReg  = uint32_t;
+    using GPReg       = uint32_t;
+    using GPRegSigned = int32_t;
+
     using RegIdx = uint8_t;
 
 private:

@@ -29,6 +29,10 @@ struct IType : public Instruction
 
     void lh(Registers& r, AddrSpace& aspace) const;
 
+    void lbu(Registers& r, AddrSpace& aspace) const;
+
+    void lhu(Registers& r, AddrSpace& aspace) const;
+
     void lw(Registers& r, AddrSpace& aspace) const;
 };
 
@@ -69,7 +73,11 @@ struct BType : public Instruction
 
     void blt(Registers& r, AddrSpace& aspace) const;
 
+    void bltu(Registers& r, AddrSpace& aspace) const;
+
     void bge(Registers& r, AddrSpace& aspace) const;
+
+    void bgeu(Registers& r, AddrSpace& aspace) const;
 };
 
 } // namespace riscvModel

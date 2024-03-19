@@ -182,7 +182,7 @@ TEST_F(TestCPU, blt)
 
     regs.PCRelJmp(32);
     regs.WriteAtReg(3, (riscvModel::Registers::GPReg)-2);
-    regs.WriteAtReg(4, (riscvModel::Registers::GPReg)-1);
+    regs.WriteAtReg(4, (riscvModel::Registers::GPReg)1);
 
     cpu.Execute(currInstr);
     ASSERT_EQ(regs.GetPC(), 32 - 24);
@@ -194,7 +194,7 @@ TEST_F(TestCPU, bge)
 
     regs.PCRelJmp(32);
     regs.WriteAtReg(1, (riscvModel::Registers::GPReg)1);
-    regs.WriteAtReg(2, (riscvModel::Registers::GPReg)0);
+    regs.WriteAtReg(2, (riscvModel::Registers::GPReg)-1);
 
     cpu.Execute(currInstr);
     ASSERT_EQ(regs.GetPC(), 32 - 20);

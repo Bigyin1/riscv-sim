@@ -31,6 +31,18 @@ void IType::lb(Registers& r, AddrSpace& aspace) const
     r.AdvancePC();
 }
 
+void IType::lbu(Registers& r, AddrSpace& aspace) const
+{
+
+    auto addr = r.ReadRegVal(this->rs1) + this->imm;
+
+    Registers::GPReg val = aspace.ReadByteFrom(addr);
+
+    r.WriteAtReg(this->rd, val);
+
+    r.AdvancePC();
+}
+
 void IType::lh(Registers& r, AddrSpace& aspace) const
 {
 
@@ -41,6 +53,18 @@ void IType::lh(Registers& r, AddrSpace& aspace) const
     {
         val |= ~(Registers::GPReg)UINT16_MAX;
     }
+
+    r.WriteAtReg(this->rd, val);
+
+    r.AdvancePC();
+}
+
+void IType::lhu(Registers& r, AddrSpace& aspace) const
+{
+
+    auto addr = r.ReadRegVal(this->rs1) + this->imm;
+
+    Registers::GPReg val = aspace.ReadHWordFrom(addr);
 
     r.WriteAtReg(this->rd, val);
 
@@ -145,6 +169,21 @@ void BType::bne(Registers& r, AddrSpace&) const
 
 void BType::blt(Registers& r, AddrSpace&) const
 {
+    auto src1 = (Registers::GPRegSigned)r.ReadRegVal(this->rs1);
+    auto src2 = (Registers::GPRegSigned)r.ReadRegVal(this->rs2);
+
+    if (src1 < src2)
+    {
+        r.PCRelJmp(this->imm);
+    }
+    else
+    {
+        r.AdvancePC();
+    }
+}
+
+void BType::bltu(Registers& r, AddrSpace&) const
+{
     auto src1 = r.ReadRegVal(this->rs1);
     auto src2 = r.ReadRegVal(this->rs2);
 
@@ -159,6 +198,21 @@ void BType::blt(Registers& r, AddrSpace&) const
 }
 
 void BType::bge(Registers& r, AddrSpace&) const
+{
+    auto src1 = (Registers::GPRegSigned)r.ReadRegVal(this->rs1);
+    auto src2 = (Registers::GPRegSigned)r.ReadRegVal(this->rs2);
+
+    if (src1 > src2)
+    {
+        r.PCRelJmp(this->imm);
+    }
+    else
+    {
+        r.AdvancePC();
+    }
+}
+
+void BType::bgeu(Registers& r, AddrSpace&) const
 {
     auto src1 = r.ReadRegVal(this->rs1);
     auto src2 = r.ReadRegVal(this->rs2);
