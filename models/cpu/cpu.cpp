@@ -30,10 +30,13 @@ void CPU::Execute(const Instruction* instr)
 
     switch (instr->id)
     {
+        ExecCase(0b000'1100111, I, jalr);
         ExecCase(0b000'0010011, I, addi);
         ExecCase(0b000'0000011, I, lb);
         ExecCase(0b001'0000011, I, lh);
         ExecCase(0b010'0000011, I, lw);
+        ExecCase(0b100'0000011, I, lbu);
+        ExecCase(0b101'0000011, I, lhu);
 
         ExecCase(0b0000000'000'0110011, R, add);
         ExecCase(0b0100000'000'0110011, R, sub);
@@ -46,6 +49,10 @@ void CPU::Execute(const Instruction* instr)
         ExecCase(0b001'1100011, B, bne);
         ExecCase(0b100'1100011, B, blt);
         ExecCase(0b101'1100011, B, bge);
+        ExecCase(0b110'1100011, B, bltu);
+        ExecCase(0b111'1100011, B, bgeu);
+
+        ExecCase(0b1101111, J, jal);
 
         default:
 

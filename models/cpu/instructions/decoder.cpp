@@ -12,8 +12,9 @@ const Instruction* Decoder::Decode(RawInstr instr)
 
     switch (opcode)
     {
-        case 0b0000011:
-        case 0b0010011:
+        case 0b1100111: // jalr
+        case 0b0000011: // loads
+        case 0b0010011: // addi
             return this->I.Decode(instr);
 
         case 0b0110011:
@@ -24,6 +25,9 @@ const Instruction* Decoder::Decode(RawInstr instr)
 
         case 0b0100011:
             return this->S.Decode(instr);
+
+        case 0b1101111:
+            return this->J.Decode(instr);
 
         default:
             return nullptr;
@@ -97,6 +101,24 @@ Instruction* Decoder::BTypeDecoder::Decode(RawInstr rinstr)
     if (map.imm1_2)
     {
         this->instr.imm |= ~(uint64_t)0b111'111'111'111;
+    }
+
+    return static_cast<Instruction*>(&this->instr);
+}
+
+Instruction* Decoder::JTypeDecoder::Decode(RawInstr rinstr)
+{
+    map.instr = rinstr;
+
+    this->instr.id = buildInstrID(map.opcode, 0, 0);
+    this->instr.rd = map.rd;
+
+    this->instr.imm =
+        (uint64_t)map.imm10 << 1 | (uint64_t)map.imm1_1 << 11 | (uint64_t)map.imm8 << 12;
+
+    if (map.imm1_2)
+    {
+        this->instr.imm |= ~(uint64_t)((1 << 20) - 1);
     }
 
     return static_cast<Instruction*>(&this->instr);

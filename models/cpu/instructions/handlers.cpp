@@ -1,5 +1,3 @@
-
-
 #include "cpu/instruction.hpp"
 
 namespace riscvModel
@@ -225,6 +223,24 @@ void BType::bgeu(Registers& r, AddrSpace&) const
     {
         r.AdvancePC();
     }
+}
+
+void JType::jal(Registers& r, AddrSpace&) const
+{
+
+    r.WriteAtReg(this->rd, (Registers::GPReg)r.GetPC() + sizeof(uint32_t));
+
+    r.PCRelJmp(this->imm);
+}
+
+void IType::jalr(Registers& r, AddrSpace&) const
+{
+    int64_t base   = (int64_t)r.ReadRegVal(this->rs1);
+    int64_t offset = (base + (int64_t)this->imm) ^ 0b1;
+
+    r.WriteAtReg(this->rd, (Registers::GPReg)r.GetPC() + sizeof(uint32_t));
+
+    r.PCRelJmp((uint64_t)offset);
 }
 
 } // namespace riscvModel

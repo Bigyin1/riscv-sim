@@ -107,11 +107,35 @@ class Decoder
         Instruction* Decode(RawInstr instr);
     };
 
+    class JTypeDecoder
+    {
+    private:
+        JType instr;
+
+        union
+        {
+            RawInstr instr;
+            struct
+            {
+                uint8_t  opcode : 7;
+                uint8_t  rd : 5;
+                uint32_t imm8 : 8;
+                uint32_t imm1_1 : 1;
+                uint32_t imm10 : 10;
+                uint32_t imm1_2 : 1;
+            } __attribute__((packed));
+        } map;
+
+    public:
+        Instruction* Decode(RawInstr instr);
+    };
+
 private:
     ITypeDecoder I;
     RTypeDecoder R;
     STypeDecoder S;
     BTypeDecoder B;
+    JTypeDecoder J;
 
 public:
     const Instruction* Decode(RawInstr instr);

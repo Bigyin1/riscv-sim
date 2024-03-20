@@ -23,6 +23,8 @@ struct IType : public Instruction
     Registers::RegIdx rs1;
     Registers::RegIdx rd;
 
+    void jalr(Registers& r, AddrSpace& aspace) const;
+
     void addi(Registers& r, AddrSpace& aspace) const;
 
     void lb(Registers& r, AddrSpace& aspace) const;
@@ -78,6 +80,14 @@ struct BType : public Instruction
     void bge(Registers& r, AddrSpace& aspace) const;
 
     void bgeu(Registers& r, AddrSpace& aspace) const;
+};
+
+struct JType : public Instruction
+{
+    uint64_t          imm;
+    Registers::RegIdx rd;
+
+    void jal(Registers& r, AddrSpace& aspace) const;
 };
 
 } // namespace riscvModel
