@@ -54,6 +54,9 @@ void CPU::Execute(const Instruction* instr)
 
         ExecCase(0b1101111, J, jal);
 
+        ExecCase(0b0110111, U, lui);
+        ExecCase(0b0010111, U, auipc);
+
         default:
 
             std::cout << "unknown iid:" << instr->id << std::endl;

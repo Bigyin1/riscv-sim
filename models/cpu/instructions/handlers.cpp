@@ -235,12 +235,30 @@ void JType::jal(Registers& r, AddrSpace&) const
 
 void IType::jalr(Registers& r, AddrSpace&) const
 {
-    int64_t base   = (int64_t)r.ReadRegVal(this->rs1);
-    int64_t offset = (base + (int64_t)this->imm) ^ 0b1;
+    auto base   = r.ReadRegVal(this->rs1);
+    auto offset = (base + this->imm) ^ (Registers::GPReg)0b1;
 
     r.WriteAtReg(this->rd, (Registers::GPReg)r.GetPC() + sizeof(uint32_t));
 
-    r.PCRelJmp((uint64_t)offset);
+    r.PCRelJmp(offset);
+}
+
+void UType::lui(Registers& r, AddrSpace&) const
+{
+
+    r.WriteAtReg(this->rd, this->imm);
+
+    r.AdvancePC();
+}
+
+void UType::auipc(Registers& r, AddrSpace&) const
+{
+    auto base   = (Registers::GPReg)r.GetPC();
+    auto offset = base + this->imm;
+
+    r.WriteAtReg(this->rd, offset);
+
+    r.AdvancePC();
 }
 
 } // namespace riscvModel

@@ -29,6 +29,10 @@ const Instruction* Decoder::Decode(RawInstr instr)
         case 0b1101111:
             return this->J.Decode(instr);
 
+        case 0b0110111:
+        case 0b0010111:
+            return this->U.Decode(instr);
+
         default:
             return nullptr;
     }
@@ -120,6 +124,19 @@ Instruction* Decoder::JTypeDecoder::Decode(RawInstr rinstr)
     {
         this->instr.imm |= ~(uint64_t)((1 << 20) - 1);
     }
+
+    return static_cast<Instruction*>(&this->instr);
+}
+
+Instruction* Decoder::UTypeDecoder::Decode(RawInstr rinstr)
+{
+
+    map.instr = rinstr;
+
+    this->instr.id = buildInstrID(map.opcode, 0, 0);
+    this->instr.rd = map.rd;
+
+    this->instr.imm = (GPReg)map.imm20 << 12;
 
     return static_cast<Instruction*>(&this->instr);
 }

@@ -90,4 +90,14 @@ struct JType : public Instruction
     void jal(Registers& r, AddrSpace& aspace) const;
 };
 
+struct UType : public Instruction
+{
+    Registers::GPReg  imm;
+    Registers::RegIdx rd;
+
+    void lui(Registers& r, AddrSpace& aspace) const;
+
+    void auipc(Registers& r, AddrSpace& aspace) const;
+};
+
 } // namespace riscvModel

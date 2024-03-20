@@ -130,12 +130,33 @@ class Decoder
         Instruction* Decode(RawInstr instr);
     };
 
+    class UTypeDecoder
+    {
+    private:
+        UType instr;
+
+        union
+        {
+            RawInstr instr;
+            struct
+            {
+                uint8_t  opcode : 7;
+                uint8_t  rd : 5;
+                uint32_t imm20 : 20;
+            } __attribute__((packed));
+        } map;
+
+    public:
+        Instruction* Decode(RawInstr instr);
+    };
+
 private:
     ITypeDecoder I;
     RTypeDecoder R;
     STypeDecoder S;
     BTypeDecoder B;
     JTypeDecoder J;
+    UTypeDecoder U;
 
 public:
     const Instruction* Decode(RawInstr instr);
