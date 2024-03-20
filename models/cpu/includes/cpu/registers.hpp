@@ -29,5 +29,7 @@ public:
 
     GPReg ReadRegVal(RegIdx idx) const;
     void  WriteAtReg(RegIdx idx, GPReg w);
+
+    bool stopped = false;
 };
 } // namespace riscvModel

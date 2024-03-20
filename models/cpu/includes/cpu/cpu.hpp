@@ -23,6 +23,8 @@ public:
     RawInstr           Fetch();
     const Instruction* Decode(RawInstr iraw);
     void               Execute(const Instruction* instr);
+
+    bool IsStopped();
 };
 
 } // namespace riscvModel

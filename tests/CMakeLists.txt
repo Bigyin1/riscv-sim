@@ -13,3 +13,10 @@ target_link_libraries(models_test PRIVATE
     cpu ram GTest::gtest_main project_options project_warnings)
 
 add_test(NAME models_test COMMAND models_test WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_executable(semihosting_test semihosting_test.cpp)
+
+target_link_libraries(semihosting_test PRIVATE
+    cpu ram GTest::gtest_main project_options project_warnings)
+
+add_test(NAME semihosting_test COMMAND semihosting_test WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})

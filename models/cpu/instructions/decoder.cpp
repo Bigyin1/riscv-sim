@@ -15,6 +15,8 @@ const Instruction* Decoder::Decode(RawInstr instr)
         case 0b1100111: // jalr
         case 0b0000011: // loads
         case 0b0010011: // addi
+        case 0b0001111: // fence
+        case 0b1110011: // ecall, break
             return this->I.Decode(instr);
 
         case 0b0110011:
@@ -29,8 +31,8 @@ const Instruction* Decoder::Decode(RawInstr instr)
         case 0b1101111:
             return this->J.Decode(instr);
 
-        case 0b0110111:
-        case 0b0010111:
+        case 0b0110111: // lui
+        case 0b0010111: // auipc
             return this->U.Decode(instr);
 
         default:
@@ -48,7 +50,14 @@ Instruction* Decoder::ITypeDecoder::Decode(RawInstr rinstr)
 {
     map.instr = rinstr;
 
-    this->instr.id  = buildInstrID(map.opcode, map.funct3, 0);
+    if (map.opcode == 0b1110011) // ebreak
+    {
+        this->instr.id = buildInstrID(map.opcode, map.funct3, (uint8_t)map.imm);
+    }
+    else
+    {
+        this->instr.id = buildInstrID(map.opcode, map.funct3, 0);
+    }
     this->instr.rd  = map.rd;
     this->instr.rs1 = map.rs1;
     this->instr.imm = map.imm;

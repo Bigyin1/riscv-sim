@@ -20,6 +20,11 @@ const Instruction* CPU::Decode(RawInstr iraw)
     return this->idecoder.Decode(iraw);
 }
 
+bool CPU::IsStopped()
+{
+    return this->regs.stopped;
+}
+
 void CPU::Execute(const Instruction* instr)
 {
 
@@ -56,6 +61,10 @@ void CPU::Execute(const Instruction* instr)
 
         ExecCase(0b0110111, U, lui);
         ExecCase(0b0010111, U, auipc);
+
+        ExecCase(0b0'000'0001111, I, fence);
+        ExecCase(0b0'000'1110011, I, ecall);
+        ExecCase(0b1'000'1110011, I, ebreak);
 
         default:
 

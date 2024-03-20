@@ -36,6 +36,12 @@ struct IType : public Instruction
     void lhu(Registers& r, AddrSpace& aspace) const;
 
     void lw(Registers& r, AddrSpace& aspace) const;
+
+    void fence(Registers& r, AddrSpace& aspace) const;
+
+    void ecall(Registers& r, AddrSpace& aspace) const;
+
+    void ebreak(Registers& r, AddrSpace& aspace) const;
 };
 
 struct RType : public Instruction
