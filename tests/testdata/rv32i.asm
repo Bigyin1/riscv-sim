@@ -21,6 +21,23 @@ lbl2:
 
         blt x3, x4, lbl1
         bge x1, x2, lbl2
+lbl3:
+        lbu x3, -27(x2)
+        lhu x2, 100(x5)
+
+        jalr x2, -28(x1)
+        jal x8, loop
+        jal x8, lbl3
+
+loop:
+        bltu x3, x4, loop
+        bgeu x3, x4, lbl3
+
+        lui x5, 1000
+        auipc x5, 512
+
+
+
 
 
 

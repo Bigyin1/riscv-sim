@@ -17,6 +17,11 @@ void Registers::PCRelJmp(uint64_t offset)
     this->pc += offset;
 }
 
+void Registers::PCAbsJmp(uint64_t target)
+{
+    this->pc = target;
+}
+
 Registers::GPReg Registers::ReadRegVal(RegIdx idx) const
 {
     return this->gpRegs[idx];

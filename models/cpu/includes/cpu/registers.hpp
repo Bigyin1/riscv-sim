@@ -24,6 +24,7 @@ public:
 
     void     AdvancePC();
     void     PCRelJmp(uint64_t offset);
+    void     PCAbsJmp(uint64_t target);
     uint64_t GetPC();
 
     GPReg ReadRegVal(RegIdx idx) const;

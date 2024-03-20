@@ -189,6 +189,99 @@ TEST_F(TestCPU, bge)
     ASSERT_EQ(regs.GetPC(), 32 - 20);
 }
 
+TEST_F(TestCPU, lbu)
+{
+
+    regs.WriteAtReg(2, (GPReg)500);
+
+    aspace.WriteByteAt(500 - 27, (uint8_t)INT8_MIN);
+
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.ReadRegVal(3), (uint8_t)INT8_MIN);
+}
+
+TEST_F(TestCPU, lhu)
+{
+
+    regs.WriteAtReg(5, (GPReg)410);
+
+    aspace.WriteHWordAt(410 + 100, (uint16_t)-513);
+
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.ReadRegVal(2), (uint16_t)-513);
+}
+
+TEST_F(TestCPU, jalr)
+{
+
+    regs.WriteAtReg(1, (GPReg)33);
+
+    auto iniPC = regs.GetPC();
+
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.GetPC(), (33 - 28) ^ 0b1);
+    ASSERT_EQ(regs.ReadRegVal(2), iniPC + sizeof(uint32_t));
+}
+
+TEST_F(TestCPU, jal)
+{
+
+    auto iniPC = regs.GetPC();
+
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.GetPC(), 0 + 8);
+    ASSERT_EQ(regs.ReadRegVal(8), iniPC + sizeof(uint32_t));
+}
+
+TEST_F(TestCPU, jal_2)
+{
+    regs.PCRelJmp(32);
+    auto iniPC = regs.GetPC();
+
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.GetPC(), 32 - 16);
+    ASSERT_EQ(regs.ReadRegVal(8), iniPC + sizeof(uint32_t));
+}
+
+TEST_F(TestCPU, bltu)
+{
+
+    regs.PCRelJmp(32);
+    regs.WriteAtReg(3, (GPReg)0);
+    regs.WriteAtReg(4, (GPReg)5);
+
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.GetPC(), 32 - 0);
+}
+
+TEST_F(TestCPU, bgeu)
+{
+
+    regs.PCRelJmp(32);
+    regs.WriteAtReg(3, (GPReg)-1);
+    regs.WriteAtReg(4, (GPReg)1);
+
+    cpu.Execute(currInstr);
+    ASSERT_EQ(regs.GetPC(), 32 - 24);
+}
+
+TEST_F(TestCPU, lui)
+{
+
+    cpu.Execute(currInstr);
+
+    ASSERT_EQ(regs.ReadRegVal(5), 1000 << 12);
+}
+
+TEST_F(TestCPU, auipc)
+{
+    regs.PCRelJmp(32);
+
+    cpu.Execute(currInstr);
+
+    ASSERT_EQ(regs.ReadRegVal(5), 32 + (512 << 12));
+}
+
 int main(int argc, char** argv)
 {
 

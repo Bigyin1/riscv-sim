@@ -236,11 +236,11 @@ void JType::jal(Registers& r, AddrSpace&) const
 void IType::jalr(Registers& r, AddrSpace&) const
 {
     auto base   = r.ReadRegVal(this->rs1);
-    auto offset = (base + this->imm) ^ (Registers::GPReg)0b1;
+    auto target = (base + this->imm) ^ (Registers::GPReg)0b1;
 
     r.WriteAtReg(this->rd, (Registers::GPReg)r.GetPC() + sizeof(uint32_t));
 
-    r.PCRelJmp(offset);
+    r.PCAbsJmp(target);
 }
 
 void UType::lui(Registers& r, AddrSpace&) const
