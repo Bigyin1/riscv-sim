@@ -263,7 +263,10 @@ void UType::auipc(Registers& r, AddrSpace&) const
     r.AdvancePC();
 }
 
-void IType::fence(Registers&, AddrSpace&) const {}
+void IType::fence(Registers& r, AddrSpace&) const
+{
+    r.AdvancePC();
+}
 
 void IType::ecall(Registers& r, AddrSpace& aspace) const
 {
