@@ -2,17 +2,18 @@ include(FetchContent)
 
 FetchContent_Declare(
     googletest
+    SYSTEM
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG v1.14.0
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(models_test cpu_test.cpp)
+add_executable(cpu_test cpu_test.cpp)
 
-target_link_libraries(models_test PRIVATE
+target_link_libraries(cpu_test PRIVATE
     cpu ram GTest::gtest_main project_options project_warnings)
 
-add_test(NAME models_test COMMAND models_test WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_test(NAME cpu_test COMMAND cpu_test WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(semihosting_test semihosting_test.cpp)
 

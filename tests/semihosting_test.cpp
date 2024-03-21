@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <iostream>
+#include <sstream>
 
 #include "cpu/cpu.hpp"
 #include "ram/ram.hpp"
@@ -14,10 +15,13 @@ TEST(Semihosting, helloworld)
     ram.LoadCode(hw, 0);
     hw.close();
 
-    riscvModel::AddrSpace aspace{&ram};
+    riscvModel::AddrSpace aspace = {&ram};
+    riscvModel::Registers regs   = {0};
 
-    riscvModel::Registers regs = {0};
-    riscvModel::CPU       cpu(regs, aspace);
+    std::ostringstream      output;
+    riscvModel::Environment env(std::cin, output);
+
+    riscvModel::CPU cpu(regs, aspace, env);
 
     while (!cpu.IsStopped())
     {
@@ -28,6 +32,8 @@ TEST(Semihosting, helloworld)
 
         cpu.Execute(instr);
     }
+
+    ASSERT_EQ(output.str(), "Hello World!\n");
 }
 
 int main(int argc, char** argv)

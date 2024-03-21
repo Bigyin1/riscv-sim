@@ -8,7 +8,10 @@
 namespace riscvModel
 {
 
-CPU::CPU(Registers& _regs, AddrSpace& aspace) : regs(_regs), addrSpace(aspace) {}
+CPU::CPU(Registers& _regs, AddrSpace& _aspace, Environment& _env)
+    : regs(_regs), addrSpace(_aspace), env(_env)
+{
+}
 
 RawInstr CPU::Fetch()
 {
@@ -28,9 +31,10 @@ bool CPU::IsStopped()
 void CPU::Execute(const Instruction* instr)
 {
 
-#define ExecCase(iid, itype, iname)                                                                \
+#define ExecCase(iid, itype, iname, ...)                                                           \
     case iid:                                                                                      \
-        static_cast<const itype##Type*>(instr)->iname(this->regs, this->addrSpace);                \
+        std::cout << "executing: " << #iname << std::endl;                                         \
+        static_cast<const itype##Type*>(instr)->iname(this->regs, this->addrSpace __VA_ARGS__);    \
         break;
 
     switch (instr->id)
@@ -63,7 +67,7 @@ void CPU::Execute(const Instruction* instr)
         ExecCase(0b0010111, U, auipc);
 
         ExecCase(0b0'000'0001111, I, fence);
-        ExecCase(0b0'000'1110011, I, ecall);
+        ExecCase(0b0'000'1110011, I, ecall, , this->env);
         ExecCase(0b1'000'1110011, I, ebreak);
 
         default:

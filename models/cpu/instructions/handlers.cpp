@@ -268,31 +268,12 @@ void IType::fence(Registers& r, AddrSpace&) const
     r.AdvancePC();
 }
 
-void IType::ecall(Registers& r, AddrSpace& aspace) const
+void IType::ecall(Registers& r, AddrSpace& aspace, Environment& env) const
 {
 
-    if (r.ReadRegVal(17) == 93) // exit
-    {
-        r.stopped = true;
-        r.AdvancePC();
-        return;
-    }
+    env.EnvCall(r, aspace);
 
-    if (r.ReadRegVal(17) == 64) // write
-    {
-        int      fd   = (int)r.ReadRegVal(10);
-        uint64_t addr = r.ReadRegVal(11);
-        uint64_t len  = r.ReadRegVal(12);
-
-        for (size_t i = 0; i < len; i++)
-        {
-            uint8_t c = aspace.ReadByteFrom(addr + i);
-            write(fd, &c, 1);
-        }
-
-        r.AdvancePC();
-        return;
-    }
+    r.AdvancePC();
 }
 
 void IType::ebreak(Registers& r, AddrSpace&) const

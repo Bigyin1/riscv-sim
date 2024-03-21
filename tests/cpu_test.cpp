@@ -9,7 +9,7 @@
 class TestCPU : public testing::Test
 {
 protected:
-    TestCPU() : aspace(&ram), cpu(regs, aspace) {}
+    TestCPU() : aspace(&ram), cpu(regs, aspace, env) {}
 
     static void SetUpTestSuite() { input.open("testdata/rv32i.bin"); }
 
@@ -17,7 +17,6 @@ protected:
 
     virtual void SetUp() override
     {
-
         uint32_t rinstr = 0;
         input.read((char*)&rinstr, sizeof(rinstr));
 
@@ -29,9 +28,10 @@ protected:
 
     const riscvModel::Instruction* currInstr = nullptr;
 
-    riscvModel::RAM<512>  ram  = {0};
-    riscvModel::Registers regs = {0};
-    riscvModel::AddrSpace aspace;
+    riscvModel::RAM<512>    ram  = {0};
+    riscvModel::Registers   regs = {0};
+    riscvModel::AddrSpace   aspace;
+    riscvModel::Environment env = {};
 
     riscvModel::CPU cpu;
 

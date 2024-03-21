@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "cpu/addrSpace.hpp"
+#include "cpu/environment.hpp"
 #include "cpu/registers.hpp"
 
 namespace riscvModel
@@ -39,7 +40,7 @@ struct IType : public Instruction
 
     void fence(Registers& r, AddrSpace& aspace) const;
 
-    void ecall(Registers& r, AddrSpace& aspace) const;
+    void ecall(Registers& r, AddrSpace& aspace, Environment& env) const;
 
     void ebreak(Registers& r, AddrSpace& aspace) const;
 };

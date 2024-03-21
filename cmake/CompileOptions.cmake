@@ -1,5 +1,5 @@
 add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_17)
+target_compile_features(project_options INTERFACE cxx_std_20)
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     target_compile_options(project_options INTERFACE
