@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 include(cmake/CompileOptions.cmake)
 
 enable_testing()
-
 add_subdirectory(models/cpu)
 add_subdirectory(models/ram)
 
