@@ -71,11 +71,7 @@ void CPU::Execute(const Instruction* instr)
         ExecCase(0b1'000'1110011, I, ebreak);
 
         default:
-
-            std::cout << "unknown iid:" << instr->id << std::endl;
-
-            std::abort();
-            break;
+            throw std::runtime_error("unknown iid");
     }
 
 #undef ExecCase
