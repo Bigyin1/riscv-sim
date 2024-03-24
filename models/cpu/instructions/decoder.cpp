@@ -40,7 +40,7 @@ const Instruction* Decoder::Decode(RawInstr instr)
     }
 }
 
-Instruction::InstrID Decoder::buildInstrID(uint8_t opcode, uint8_t funct3, uint8_t funct7)
+static Instruction::InstrID buildInstrID(uint8_t opcode, uint8_t funct3, uint8_t funct7)
 {
 
     return ((uint32_t)opcode | (uint32_t)funct3 << 7 | (uint32_t)funct7 << 10);

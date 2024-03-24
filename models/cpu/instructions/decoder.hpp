@@ -12,8 +12,6 @@ class Decoder
 
     using GPReg = Registers::GPReg;
 
-    static Instruction::InstrID buildInstrID(uint8_t opcode, uint8_t funct3, uint8_t funct7);
-
     class ITypeDecoder
     {
     private:
